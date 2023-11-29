@@ -15,9 +15,10 @@ X = cdc_dataset.data.features
 y = cdc_dataset.data.targets
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=1_337)
-print(X.corr())
-#print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
-print(X_train, y_train)
+#print(X.corr())
+
+print(X_train['Income'].value_counts())
+
 models = [LogisticRegression(), KNeighborsClassifier(n_neighbors=5), GaussianNB(), RandomForestClassifier(),
         SVC(kernel="rbf")]
 
