@@ -25,7 +25,7 @@ For the purposes of this project, the target column Diabetes_012 is mapped:
 df = pd.read_csv('diabetes_012_health_indicators_BRFSS2015.csv')
 
 dups = df[df.duplicated()]
-print("Number of duplicate rows: ", len(dups))
+print("Number of dropped duplicate rows: ", len(dups))
 
 df.drop_duplicates(inplace=True)
 
@@ -38,17 +38,20 @@ X = df.drop(columns=['Diabetes_012'])
 
 y = df['Diabetes_012']
 
-df.drop_duplicates(inplace=True)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=1234)
 
+standardizer = StandardScaler().fit(X_train)
+
+X_train_st = standardizer.transform(X_train)
+X_test_st = standardizer.transform(X_test)
+
 selector = SelectFromModel(RandomForestClassifier(), threshold="median")
-selector.fit(X_train, y_train)
+selector.fit(X_train_st, y_train)
 
-X_train_select = selector.transform(X_train)
-X_test_select = selector.transform(X_test)
+X_train_select = selector.transform(X_train_st)
+X_test_select = selector.transform(X_test_st)
 
-print(X_test_select)
 models = [KNeighborsClassifier(n_neighbors=5), GaussianNB(), 
         RandomForestClassifier()]
 
